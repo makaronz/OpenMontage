@@ -11,6 +11,8 @@ Dark operator dashboard for local OpenMontage control plane.
 | `--color-primary` | `#22C55E` | Primary CTA, success states |
 | `--color-text` | `#F8FAFC` | Body text on dark |
 | `--color-muted` | `#94A3B8` | Secondary text, labels |
+| `--color-warn` | `#F59E0B` | Warming, almost-ready, caution badges |
+| `--color-danger` | `#EF4444` | Action required, API offline, errors |
 | `--font-mono` | `"Fira Code", ui-monospace, monospace` | Tool names, env keys, JSON |
 | `--font-sans` | `"Fira Sans", system-ui, sans-serif` | UI chrome |
 | Spacing base | `8px` | Layout grid unit |

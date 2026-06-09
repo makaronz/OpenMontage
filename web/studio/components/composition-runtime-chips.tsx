@@ -8,6 +8,12 @@ const RUNTIME_LABELS: Record<string, string> = {
   hyperframes: "HyperFrames",
 };
 
+const RUNTIME_TOOLTIPS: Record<string, string> = {
+  ffmpeg: "CLI available for media transforms",
+  remotion: "React programmatic video runtime",
+  hyperframes: "HTML composition runtime",
+};
+
 export function CompositionRuntimeChips({
   runtimes,
 }: CompositionRuntimeChipsProps) {
@@ -15,9 +21,7 @@ export function CompositionRuntimeChips({
 
   if (entries.length === 0) {
     return (
-      <p className="text-sm text-[var(--color-muted)]">
-        No composition runtimes reported.
-      </p>
+      <p className="text-sm text-[var(--color-muted)]">No runtime data</p>
     );
   }
 
@@ -26,6 +30,7 @@ export function CompositionRuntimeChips({
       {entries.map(([key, available]) => (
         <li
           key={key}
+          title={RUNTIME_TOOLTIPS[key]}
           className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium ${
             available
               ? "border-[var(--color-primary)]/30 bg-[var(--color-primary)]/10 text-[var(--color-primary)]"
@@ -34,7 +39,9 @@ export function CompositionRuntimeChips({
         >
           <span
             className={`size-1.5 rounded-full ${
-              available ? "bg-[var(--color-primary)]" : "bg-red-400/80"
+              available
+                ? "bg-[var(--color-primary)]"
+                : "bg-[var(--color-danger)]"
             }`}
             aria-hidden
           />

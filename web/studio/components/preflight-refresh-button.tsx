@@ -1,5 +1,6 @@
 "use client";
 
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -31,6 +32,8 @@ export function PreflightRefreshButton({
         setError(result.error ?? "Preflight refresh failed");
       }
       router.refresh();
+    } catch {
+      setError("Refresh failed — try again");
     } finally {
       setPending(false);
     }
@@ -41,13 +44,24 @@ export function PreflightRefreshButton({
       <button
         type="button"
         disabled={disabled || pending}
+        aria-busy={pending}
         onClick={() => void handleRefresh()}
-        className="rounded-md border border-white/15 px-3 py-2 text-sm text-[var(--color-text)] hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-50"
+        className="inline-flex min-h-11 items-center rounded-md border border-white/15 px-3 py-2 text-sm text-[var(--color-text)] hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)]"
       >
-        {pending ? "Refreshing preflight…" : "Refresh preflight"}
+        {pending ? (
+          <>
+            <Loader2
+              className="mr-2 inline size-4 animate-spin motion-reduce:animate-none"
+              aria-hidden
+            />
+            Refreshing preflight…
+          </>
+        ) : (
+          "Refresh preflight"
+        )}
       </button>
       {error ? (
-        <p className="mt-2 text-xs text-red-300">{error}</p>
+        <p className="mt-2 text-xs text-[var(--color-danger)]">{error}</p>
       ) : null}
     </div>
   );
