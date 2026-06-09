@@ -4,6 +4,7 @@ services:
     runtime: python
     plan: free
     region: oregon
+    repo: https://github.com/makaronz/OpenMontage.git
     branch: feat/studio-phase-0
     buildCommand: pip install -r requirements.txt && pip install -e services/studio-api
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT --app-dir services/studio-api
@@ -17,6 +18,7 @@ services:
     runtime: node
     plan: free
     region: oregon
+    repo: https://github.com/makaronz/OpenMontage.git
     branch: feat/studio-phase-0
     rootDir: web/studio
     buildCommand: npm ci && npm run build
