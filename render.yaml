@@ -6,7 +6,7 @@ services:
     region: oregon
     repo: https://github.com/makaronz/OpenMontage.git
     branch: feat/studio-phase-0
-    buildCommand: pip install -r requirements.txt && pip install -e services/studio-api
+    buildCommand: pip install -r requirements.txt fastapi uvicorn[standard]
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT --app-dir services/studio-api
     healthCheckPath: /api/health
     envVars:
