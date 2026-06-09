@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: openmontage-studio-api
+    runtime: python
+    plan: free
+    region: oregon
+    branch: feat/studio-phase-0
+    buildCommand: pip install -r requirements.txt && pip install -e services/studio-api
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT --app-dir services/studio-api
+    healthCheckPath: /api/health
+    envVars:
+      - key: STUDIO_ALLOWED_ORIGIN_REGEX
+        value: https://.*\.(onrender|vercel)\.app
+
+  - type: web
+    name: openmontage-studio
+    runtime: node
+    plan: free
+    region: oregon
+    branch: feat/studio-phase-0
+    rootDir: web/studio
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start -- --hostname 0.0.0.0 --port $PORT
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: 22.12.0
+      - key: STUDIO_API_URL
+        value: https://openmontage-studio-api.onrender.com
+      - key: NEXT_PUBLIC_STUDIO_API_URL
+        value: https://openmontage-studio-api.onrender.com

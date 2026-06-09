@@ -1,7 +1,11 @@
 const DEFAULT_STUDIO_API_URL = "http://127.0.0.1:8000";
 
 export function studioApiBase(): string {
-  return process.env.STUDIO_API_URL ?? DEFAULT_STUDIO_API_URL;
+  return (
+    process.env.NEXT_PUBLIC_STUDIO_API_URL ??
+    process.env.STUDIO_API_URL ??
+    DEFAULT_STUDIO_API_URL
+  );
 }
 
 export type HealthResponse = {

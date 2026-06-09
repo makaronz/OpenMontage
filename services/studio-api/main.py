@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
+import os
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,6 +12,22 @@ from preflight import PreflightCache
 from repo import get_repo_root
 
 preflight_cache = PreflightCache()
+DEFAULT_ALLOWED_ORIGINS = ("http://localhost:3000", "http://127.0.0.1:3000")
+
+
+def allowed_origins() -> list[str]:
+    configured = os.environ.get("STUDIO_ALLOWED_ORIGINS", "")
+    extra_origins = [
+        origin.strip().rstrip("/")
+        for origin in configured.split(",")
+        if origin.strip()
+    ]
+    return list(dict.fromkeys([*DEFAULT_ALLOWED_ORIGINS, *extra_origins]))
+
+
+def allowed_origin_regex() -> str | None:
+    configured = os.environ.get("STUDIO_ALLOWED_ORIGIN_REGEX", "").strip()
+    return configured or None
 
 
 @asynccontextmanager
@@ -26,7 +43,8 @@ app = FastAPI(title="OpenMontage Studio API", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=allowed_origins(),
+    allow_origin_regex=allowed_origin_regex(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
