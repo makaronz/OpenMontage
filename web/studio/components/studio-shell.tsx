@@ -64,7 +64,7 @@ export function StudioShell({ children }: { children: React.ReactNode }) {
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="border-b border-white/10 bg-[var(--color-surface)]/60 px-6 py-4 backdrop-blur">
           <p className="text-sm text-[var(--color-muted)]">
-            Phase 0 shell · localhost control plane
+            Phase 1 · localhost control plane
           </p>
         </header>
         <main className="flex-1 px-6 py-6">{children}</main>

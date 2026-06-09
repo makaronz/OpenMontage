@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from preflight import PreflightCache
@@ -34,11 +34,28 @@ app.add_middleware(
 
 
 @app.get("/api/health")
-def health() -> dict[str, str]:
-    return {"status": "ok"}
+def health(request: Request) -> dict[str, str]:
+    return {"status": "ok", "repo_root": str(request.app.state.repo_root)}
 
 
 @app.get("/api/preflight/summary")
 def preflight_summary() -> dict:
     """Cached provider menu rollup; warms on API startup in a background thread."""
     return preflight_cache.as_response()
+
+
+@app.post("/api/preflight/run")
+def preflight_run(request: Request) -> dict:
+    """Refresh registry after local .env changes."""
+    preflight_cache.refresh(request.app.state.repo_root)
+    return preflight_cache.as_response()
+
+
+@app.get("/api/capabilities/catalog")
+def capabilities_catalog(request: Request) -> dict:
+    """Full capability catalog grouped by family (requires warm registry)."""
+    response = preflight_cache.as_response()
+    if response.get("status") != "ready":
+        return {"status": response.get("status", "warming"), "catalog": None}
+    catalog = preflight_cache.capability_catalog(request.app.state.repo_root)
+    return {"status": "ready", "catalog": catalog}

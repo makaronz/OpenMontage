@@ -54,6 +54,28 @@ class PreflightCache:
         )
         self._thread.start()
 
+    def refresh(self, repo_root: Path) -> None:
+        """Re-run discover() after .env changes (e.g. new API keys)."""
+        with self._lock:
+            if self._thread is not None and self._thread.is_alive():
+                return
+            self.status = "warming"
+            self.summary = None
+            self.error = None
+            self.started_at = time.time()
+            self.ready_at = None
+        self.start_warmup(repo_root)
+
+    def capability_catalog(self, repo_root: Path) -> dict[str, Any]:
+        root = str(repo_root)
+        if root not in sys.path:
+            sys.path.insert(0, root)
+
+        from tools.tool_registry import registry
+
+        registry.ensure_discovered()
+        return registry.capability_catalog()
+
     def as_response(self) -> dict[str, Any]:
         with self._lock:
             elapsed_ms = int((time.time() - self.started_at) * 1000)
