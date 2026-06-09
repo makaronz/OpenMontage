@@ -24,7 +24,8 @@ Each option must include:
 
 Read `skills/meta/animation-runtime-selector.md` before recommending a runtime.
 
-When both Remotion and HyperFrames are available:
+When both Remotion and hyperframes are available, Present both options before
+locking a `render_runtime_selection` decision:
 
 - Remotion: best when the final composition needs deterministic React-rendered
   video, captions, audio, scene JSON, and final MP4 governance.
