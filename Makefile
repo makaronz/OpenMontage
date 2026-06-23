@@ -1,4 +1,4 @@
-.PHONY: setup install install-dev install-gpu test test-contracts lint clean preflight demo demo-list hyperframes-doctor hyperframes-warm
+.PHONY: setup install install-dev install-gpu test test-contracts lint clean preflight demo demo-list hyperframes-doctor hyperframes-warm studio-api studio-dev
 
 # ---- One-command setup ----
 
@@ -78,3 +78,11 @@ lint:
 
 clean:
 	python -c "import pathlib, shutil; [shutil.rmtree(p) for p in pathlib.Path('.').rglob('__pycache__')]; [p.unlink() for p in pathlib.Path('.').rglob('*.pyc')]"
+
+# ---- Studio (Phase 0) ----
+
+studio-api:
+	cd services/studio-api && uvicorn main:app --reload --host 127.0.0.1 --port 8000
+
+studio-dev:
+	cd web/studio && npm run dev
