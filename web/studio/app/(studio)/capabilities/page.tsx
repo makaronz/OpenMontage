@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { CapabilitiesGrid } from "@/components/capabilities-grid";
 import { CompositionRuntimeChips } from "@/components/composition-runtime-chips";
 import { PreflightRefreshButton } from "@/components/preflight-refresh-button";

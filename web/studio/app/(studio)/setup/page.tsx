@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { SetupEnvEditor } from "@/components/setup-env-editor";
 import { PreflightRefreshButton } from "@/components/preflight-refresh-button";
 import { fetchHealth } from "@/lib/api";
