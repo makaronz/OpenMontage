@@ -1,3 +1,7 @@
+
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Clock, Server, Wrench } from "lucide-react";
 
@@ -45,12 +49,17 @@ function quickActionClass(disabled: boolean): string {
   return `${base} border-white/15 text-[var(--color-text)] hover:bg-white/5`;
 }
 
-export async function DashboardPreflight() {
-  const [health, preflight] = await Promise.all([
-    fetchHealth(),
-    fetchPreflightSummary(),
-  ]);
+export function DashboardPreflight() {
+  const [data, setData] = useState<{ health: any; preflight: any } | null>(null);
 
+  useEffect(() => {
+    Promise.all([fetchHealth(), fetchPreflightSummary()]).then(
+      ([health, preflight]) => setData({ health, preflight })
+    );
+  }, []);
+
+  const health = data?.health;
+  const preflight = data?.preflight;
   const payload = preflight?.summary;
   const capabilities = payload?.capabilities ?? [];
   const setupOffers = payload?.setup_offers ?? [];
@@ -71,8 +80,7 @@ export async function DashboardPreflight() {
   const snapshot = [...capabilities]
     .sort((a, b) => a.capability.localeCompare(b.capability))
     .slice(0, 6);
-
-  return (
+return (
     <div className="space-y-8">
       {/* Hero */}
       <section className="flex flex-col gap-6 rounded-xl border border-white/10 bg-[var(--color-surface)] p-6 md:flex-row md:items-center md:justify-between">
@@ -256,7 +264,7 @@ export async function DashboardPreflight() {
               Warnings
             </h3>
             <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-[var(--color-warn)]">
-              {payload.runtime_warnings.map((warning) => (
+              {payload.runtime_warnings.map((warning: string) => (
                 <li key={warning}>{warning}</li>
               ))}
             </ul>
