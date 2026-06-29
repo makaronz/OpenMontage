@@ -1,5 +1,5 @@
 import { DashboardPreflight } from "@/components/dashboard-preflight";
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
   return <DashboardPreflight />;
 }

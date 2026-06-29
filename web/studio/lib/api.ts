@@ -1,4 +1,4 @@
-const DEFAULT_STUDIO_API_URL = "http://127.0.0.1:8000";
+const DEFAULT_STUDIO_API_URL = "";
 
 export function studioApiBase(): string {
   return (
